@@ -33,7 +33,7 @@ const portableTextComponents = {
 function StickyHeader({ show }: { show: boolean }) {
   return (
     <div 
-      className={`sticky-header fixed top-0 left-0 right-0 z-10 w-full flex px-8 lg:px-16 pt-4 lg:pt-7 justify-between transition-opacity duration-300 ${
+      className={`sticky-header fixed top-0 left-0 right-0 z-10 w-full flex p-8 justify-between transition-opacity duration-300 ${
         show ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
@@ -66,11 +66,9 @@ export default function Header({ data }: { data: any }) {
   return (
     <>
       <StickyHeader show={showSticky} />
-      <div className="w-full flex px-8 lg:px-16 pt-4 lg:pt-7 break-after">
-        <header className="header-text break-after">
-          <PortableText value={data.introText} components={portableTextComponents} />
-        </header>
-      </div>
+      <header className="header-text p-8">
+        <PortableText value={data.introText} components={portableTextComponents} />
+      </header>
     </>
   );
 }

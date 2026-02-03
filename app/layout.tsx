@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-// Configure the custom font
+// Configure the custom fonts
 const monument = localFont({
   src: [
     {
@@ -14,6 +14,17 @@ const monument = localFont({
   variable: "--font-monument",
 });
 
+const monumentMono = localFont({
+  src: [
+    {
+      path: "../public/fonts/ABCMonumentGroteskMono-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+  ],
+  variable: "--font-monument-mono",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -21,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${monument.variable} bg-white`}>{children}</body>
+      <body className={`${monument.variable} ${monumentMono.variable} bg-white`}>{children}</body>
     </html>
   );
 }

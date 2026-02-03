@@ -1,18 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-monument: var(--font-monument), sans-serif;
+  --font-monument-mono: var(--font-monument-mono), monospace;
+}
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    font-family: var(--font-monument-mono);
+  }
+}
 
 @layer components {
-  header {
-    display: block;
-    unicode-bidi: isolate;
-  }
-
   .header-text {
     font-family: var(--font-monument);
     line-height: 1.1;
     letter-spacing: 0.0075em;
-    font-size: 1rem;
+    /* Fluid typography: scales from 1.25rem at 320px to 2rem at 1200px */
+    font-size: clamp(1.25rem, 0.9rem + 1.5vw, 2rem);
     color: black;
     -webkit-font-smoothing: antialiased;
     font-smoothing: always;
@@ -20,10 +31,8 @@
     text-rendering: optimizeLegibility;
   }
 
-  @media (min-width: 1024px) {
-    .header-text {
-      font-size: 1.45rem;
-    }
+  .header-text p {
+    margin: 0;
   }
 
   .header-text a {
@@ -47,9 +56,10 @@
   }
 
   .sticky-header {
-    background-color: white;
+    background-color: transparent;
     font-family: var(--font-monument);
-    font-size: 1rem;
+    /* Fluid typography: scales from 1rem at 320px to 2rem at 1200px */
+    font-size: clamp(1rem, 0.6rem + 1.7vw, 2rem);
     line-height: 1.1;
     letter-spacing: 0.0075em;
     color: black;
@@ -58,9 +68,60 @@
     text-rendering: optimizeLegibility;
   }
 
-  @media (min-width: 1024px) {
-    .sticky-header {
-      font-size: 1.45rem;
-    }
+  /* Projects Table */
+  .projects-table {
+    font-family: var(--font-monument-mono);
+    /* Fluid typography: scales from 0.7rem at 320px to 0.875rem at 1200px */
+    font-size: clamp(0.7rem, 0.6rem + 0.4vw, 0.875rem);
+    line-height: 1.4;
+    color: black;
+    padding: clamp(1.5rem, 1rem + 2vw, 2rem);
+  }
+
+  .projects-row {
+    display: grid;
+    grid-template-columns: 10% 10% 25% 25% 15% 15%;
+    gap: 0.5rem;
+    align-items: start;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+  }
+
+  .projects-row--header {
+    cursor: default;
+  }
+
+  .projects-row--no-link {
+    cursor: default;
+  }
+
+  /* Prevent link hover from adding underline to the whole row */
+  a.projects-row,
+  a.projects-row:hover {
+    text-decoration: none;
+  }
+
+  .projects-cell {
+    display: inline;
+  }
+
+  .cell-label {
+    text-transform: uppercase;
+    margin-right: 0.75em;
+  }
+
+  /* Clickable elements get underline on hover */
+  .sortable-header:hover {
+    text-decoration: underline !important;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
+  .clickable:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+    cursor: pointer;
   }
 }

@@ -14,12 +14,17 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title('Header')
                 .child(
-                  S.documentTypeList('header')
+                  S.document()
+                    .schemaType('header')
+                    .documentId('header')
                     .title('Header')
+                ),
+              S.listItem()
+                .title('Projects')
+                .child(
+                  S.documentTypeList('project')
+                    .title('Projects')
                 ),
             ])
         ),
-      ...S.documentTypeListItems().filter(
-        (item) => item.getId() !== 'header'
-      ),
     ])
