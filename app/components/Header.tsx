@@ -3,37 +3,43 @@ import { PortableText } from "@portabletext/react";
 
 async function getHeaderData() {
   const data = await client.fetch(`*[_type == "header"][0]`);
+  console.log("Header data:", JSON.stringify(data, null, 2));
   return data;
 }
+
+const portableTextComponents = {
+  marks: {
+    link: ({ children, value }: any) => {
+      const href = value?.href || "#";
+      console.log("Link component:", { children, href, value });
+      return (
+        <a
+          href={href}
+          className="cursor-pointer hover:opacity-70"
+        >
+          {children}
+        </a>
+      );
+    },
+    underline: ({ children }: any) => {
+      // Handle underlined text that should be styled as links
+      return <span className="underline-text">{children}</span>;
+    },
+  },
+};
 
 export default async function Header() {
   const data = await getHeaderData();
 
-  if (!data) return null;
+  if (!data) {
+    console.log("No header data found");
+    return <div>No header data</div>;
+  }
 
   return (
-    <header className="w-full">
-      {/* DESIGN IMPLEMENTATION:
-         pt-7           -> 1.75rem
-         px-8           -> 2rem
-         leading-[1.1]  -> Line height 1.1
-         tracking-[.0075em] -> Letter spacing
-         text-[1.45rem] -> Font size
-         decoration-1   -> Thickness 1px
-         underline-offset-[.15em] -> Offset
-      */}
-      <div className="
-        font-monument 
-        pt-7 
-        px-8 
-        leading-[1.1] 
-        tracking-[.0075em] 
-        text-[1.45rem] 
-        text-black
-        decoration-1 
-        underline-offset-[.15em]
-      ">
-        <PortableText value={data.introText} />
+    <header className="w-full bg-white">
+      <div className="header-text">
+        <PortableText value={data.introText} components={portableTextComponents} />
       </div>
     </header>
   );

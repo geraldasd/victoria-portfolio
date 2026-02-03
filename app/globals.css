@@ -1,2 +1,35 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+@layer components {
+  .header-text {
+    font-family: var(--font-monument);
+    padding-top: 1.75rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    line-height: 1.1;
+    letter-spacing: 0.0075em;
+    font-size: 1.45rem;
+    color: black;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
+  .header-text a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+    cursor: pointer;
+  }
+
+  .header-text a:hover {
+    opacity: 0.7;
+  }
+
+  .underline-text {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+}

@@ -1,9 +1,12 @@
-import Image from "next/image";
+import Header from "./components/Header";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default function Home() {
   return (
-    <div>
-      Home
-    </div>
+    <main className="min-h-screen">
+      <Header />
+    </main>
   );
 }
