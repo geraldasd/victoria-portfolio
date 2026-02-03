@@ -3,24 +3,36 @@
 @tailwind utilities;
 
 @layer components {
+  header {
+    display: block;
+    unicode-bidi: isolate;
+  }
+
   .header-text {
     font-family: var(--font-monument);
-    padding-top: 1.75rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
     line-height: 1.1;
     letter-spacing: 0.0075em;
-    font-size: 1.45rem;
+    font-size: 1rem;
     color: black;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: always;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (min-width: 1024px) {
+    .header-text {
+      font-size: 1.45rem;
+    }
   }
 
   .header-text a {
     text-decoration: underline;
+    text-decoration-color: black;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.15em;
     cursor: pointer;
+    color: black;
   }
 
   .header-text a:hover {
@@ -29,7 +41,26 @@
 
   .underline-text {
     text-decoration: underline;
+    text-decoration-color: black;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.15em;
+  }
+
+  .sticky-header {
+    background-color: white;
+    font-family: var(--font-monument);
+    font-size: 1rem;
+    line-height: 1.1;
+    letter-spacing: 0.0075em;
+    color: black;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (min-width: 1024px) {
+    .sticky-header {
+      font-size: 1.45rem;
+    }
   }
 }

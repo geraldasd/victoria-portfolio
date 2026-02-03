@@ -6,8 +6,8 @@ import "./globals.css";
 const monument = localFont({
   src: [
     {
-      path: "../public/fonts/ABCMonumentGrotesk-Medium.woff2",
-      weight: "500",
+      path: "../public/fonts/ABCMonumentGrotesk-Bold.woff2",
+      weight: "700",
       style: "normal",
     },
   ],

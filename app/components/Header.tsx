@@ -1,5 +1,8 @@
+'use client';
+
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
+import { useEffect, useState } from "react";
 
 async function getHeaderData() {
   const data = await client.fetch(`*[_type == "header"][0]`);
@@ -22,14 +25,38 @@ const portableTextComponents = {
       );
     },
     underline: ({ children }: any) => {
-      // Handle underlined text that should be styled as links
       return <span className="underline-text">{children}</span>;
     },
   },
 };
 
-export default async function Header() {
-  const data = await getHeaderData();
+function StickyHeader({ show }: { show: boolean }) {
+  return (
+    <div 
+      className={`sticky-header fixed top-0 left-0 right-0 z-10 w-full flex px-8 lg:px-16 pt-4 lg:pt-7 justify-between transition-opacity duration-300 ${
+        show ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}
+    >
+      <p className="cursor-pointer">Victoria Chen</p>
+    </div>
+  );
+}
+
+export default function Header({ data }: { data: any }) {
+  const [showSticky, setShowSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setShowSticky(true);
+      } else {
+        setShowSticky(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   if (!data) {
     console.log("No header data found");
@@ -37,10 +64,13 @@ export default async function Header() {
   }
 
   return (
-    <header className="w-full bg-white">
-      <div className="header-text">
-        <PortableText value={data.introText} components={portableTextComponents} />
+    <>
+      <StickyHeader show={showSticky} />
+      <div className="w-full flex px-8 lg:px-16 pt-4 lg:pt-7 break-after">
+        <header className="header-text break-after">
+          <PortableText value={data.introText} components={portableTextComponents} />
+        </header>
       </div>
-    </header>
+    </>
   );
 }
