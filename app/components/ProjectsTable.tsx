@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useMemo } from 'react';
+import { urlFor } from '@/sanity/lib/image';
 
 interface Project {
   _id: string;
@@ -14,6 +16,13 @@ interface Project {
   linkType?: 'none' | 'internal' | 'external';
   internalLink?: string;
   externalLink?: string;
+  featuredImage?: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  imageCaption?: string;
 }
 
 type SortKey = 'no' | 'dates' | 'name' | 'types' | 'for' | 'with';
@@ -62,44 +71,79 @@ function ProjectRow({ project }: { project: Project }) {
     onMouseLeave: () => setIsHovered(false),
   };
 
+  // Featured image component
+  const featuredImageContent = project.featuredImage?.asset ? (
+    <div className="project-featured-image">
+      <Image
+        src={urlFor(project.featuredImage).url()}
+        alt={project.name || 'Project image'}
+        width={1200}
+        height={600}
+        style={{
+          width: 'auto',
+          height: 'auto',
+          maxHeight: '600px',
+          objectFit: 'contain',
+        }}
+      />
+      {project.imageCaption && (
+        <p className="header-text" style={{ marginTop: '1rem' }}>
+          {project.imageCaption}
+        </p>
+      )}
+    </div>
+  ) : null;
+
   // No link - render as a div (no hover effect)
   if (!project.linkType || project.linkType === 'none') {
     return (
-      <div className="projects-row projects-row--no-link">
-        {content}
-      </div>
+      <>
+        <div className="projects-row projects-row--no-link">
+          {content}
+        </div>
+        {featuredImageContent}
+      </>
     );
   }
 
   // External link
   if (project.linkType === 'external' && project.externalLink) {
     return (
-      <a 
-        href={project.externalLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="projects-row"
-        {...hoverHandlers}
-      >
-        {content}
-      </a>
+      <>
+        <a 
+          href={project.externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="projects-row"
+          {...hoverHandlers}
+        >
+          {content}
+        </a>
+        {featuredImageContent}
+      </>
     );
   }
 
   // Internal link
   if (project.linkType === 'internal' && project.internalLink) {
     return (
-      <Link href={project.internalLink} className="projects-row" {...hoverHandlers}>
-        {content}
-      </Link>
+      <>
+        <Link href={project.internalLink} className="projects-row" {...hoverHandlers}>
+          {content}
+        </Link>
+        {featuredImageContent}
+      </>
     );
   }
 
   // Fallback - no link (no hover effect)
   return (
-    <div className="projects-row projects-row--no-link">
-      {content}
-    </div>
+    <>
+      <div className="projects-row projects-row--no-link">
+        {content}
+      </div>
+      {featuredImageContent}
+    </>
   );
 }
 

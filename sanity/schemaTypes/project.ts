@@ -75,6 +75,22 @@ export default defineType({
       type: 'number',
       description: 'Display order (lower numbers appear first)',
     }),
+    defineField({
+      name: 'featuredImage',
+      title: 'Featured Image',
+      type: 'image',
+      description: 'Optional featured image to display below the project row',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'imageCaption',
+      title: 'Image Caption',
+      type: 'text',
+      description: 'Caption text displayed below the featured image',
+      hidden: ({ parent }) => !parent?.featuredImage,
+    }),
   ],
   orderings: [
     {

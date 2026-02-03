@@ -124,4 +124,13 @@
     text-underline-offset: 0.15em;
     cursor: pointer;
   }
+
+  /* Featured Image below project row */
+  .project-featured-image {
+    padding: clamp(1rem, 0.5rem + 2vw, 2rem) 0;
+  }
+
+  .project-featured-image img {
+    display: block;
+  }
 }
