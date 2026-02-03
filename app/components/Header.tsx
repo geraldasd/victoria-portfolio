@@ -36,8 +36,11 @@ function StickyHeader({ show }: { show: boolean }) {
       className={`sticky-header fixed top-0 left-0 right-0 z-10 w-full flex p-8 justify-between transition-opacity duration-300 ${
         show ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
+      style={{
+        fontSize: 'clamp(1.25rem, 0.9rem + 1.5vw, 2rem)',
+      }}
     >
-      <p className="cursor-pointer">Victoria Chen</p>
+      <p className="cursor-pointer" style={{ margin: 0 }}>Victoria Chen</p>
     </div>
   );
 }

@@ -13,6 +13,7 @@ interface Project {
   types: string;
   for: string;
   with: string;
+  slug?: { current: string };
   linkType?: 'none' | 'internal' | 'external';
   internalLink?: string;
   externalLink?: string;
@@ -124,11 +125,14 @@ function ProjectRow({ project }: { project: Project }) {
     );
   }
 
-  // Internal link
-  if (project.linkType === 'internal' && project.internalLink) {
+  // Internal link - use slug if available, otherwise fall back to internalLink
+  if (project.linkType === 'internal') {
+    const href = project.slug?.current 
+      ? `/projects/${project.slug.current}` 
+      : project.internalLink || '#';
     return (
       <>
-        <Link href={project.internalLink} className="projects-row" {...hoverHandlers}>
+        <Link href={href} className="projects-row" {...hoverHandlers}>
           {content}
         </Link>
         {featuredImageContent}

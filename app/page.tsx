@@ -1,12 +1,13 @@
 import Header from "./components/Header";
 import ProjectsTable from "./components/ProjectsTable";
+import Footer from "./components/Footer";
 import { client } from "@/sanity/lib/client";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 async function getHeaderData() {
-  const data = await client.fetch(`*[_type == "header"][0]`);
+  const data = await client.fetch(`*[_type == "header" && _id == "header"][0]`);
   return data;
 }
 
@@ -15,16 +16,21 @@ async function getProjects() {
   return data;
 }
 
+async function getFooterData() {
+  const data = await client.fetch(`*[_type == "footer" && _id == "footer"][0]`);
+  return data;
+}
+
 export default async function Home() {
   const data = await getHeaderData();
   const projects = await getProjects();
+  const footerData = await getFooterData();
   
   return (
     <main className="min-h-screen">
       <Header data={data} />
       <ProjectsTable projects={projects} />
-      {/* Placeholder content for scrolling */}
-      <div className="h-[200vh]"></div>
+      <Footer data={footerData} />
     </main>
   );
 }
