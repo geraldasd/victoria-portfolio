@@ -142,20 +142,21 @@
   @media (max-width: 767px) {
     .projects-cell {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.125rem;
     }
   }
 
   .cell-label {
     text-transform: uppercase;
     margin-right: 0.75em;
+    text-decoration: none !important;
   }
 
   @media (max-width: 767px) {
     .cell-label {
       display: block;
       margin-right: 0;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0;
     }
   }
 
@@ -428,6 +429,16 @@
 
   .project-media-label {
     text-transform: uppercase;
+  }
+
+  .mobile-swipe-hint {
+    display: inline;
+  }
+
+  @media (min-width: 768px) {
+    .mobile-swipe-hint {
+      display: none;
+    }
   }
 
   .project-media-type-label {

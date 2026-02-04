@@ -173,8 +173,8 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
       {hasPhotography && (
         <div className="project-media-section">
           <div className="project-media-header">
-            <span className="project-media-label">MEDIA</span>
-            <span className="project-media-type-label">Photography</span>
+            <span className="project-media-label">MEDIA<span className="mobile-swipe-hint"> (swipe for more)</span></span>
+            <span className="project-media-type-label">Photography/Renders</span>
             <span className="project-media-counter">
               {photographyIndex + 1}/{project.photographyRenders!.length}
             </span>
@@ -223,7 +223,7 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
       {hasModels && (
         <div className="project-media-section">
           <div className="project-media-header">
-            <span className="project-media-label">MEDIA</span>
+            <span className="project-media-label">MEDIA<span className="mobile-swipe-hint"> (swipe for more)</span></span>
             <span className="project-media-type-label">Models</span>
             <span className="project-media-counter">
               {modelsIndex + 1}/{project.models!.length}
@@ -273,7 +273,7 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
       {hasDrawings && (
         <div className="project-media-section">
           <div className="project-media-header">
-            <span className="project-media-label">MEDIA</span>
+            <span className="project-media-label">MEDIA<span className="mobile-swipe-hint"> (swipe for more)</span></span>
             <span className="project-media-type-label">Drawings</span>
             <span className="project-media-counter">
               {drawingsIndex + 1}/{project.drawings!.length}

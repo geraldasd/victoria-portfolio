@@ -41,27 +41,27 @@ function ProjectRow({ project }: { project: Project }) {
   const content = (
     <>
       <span className="projects-cell">
-        <span style={{ marginRight: '1rem', textTransform: 'uppercase', textDecoration: 'none' }}>No.</span>
+        <span className="cell-label">No.</span>
         <span style={valueStyle}>{project.no || ''}</span>
       </span>
       <span className="projects-cell">
-        <span style={{ marginRight: '1rem', textTransform: 'uppercase', textDecoration: 'none' }}>DATE/S</span>
+        <span className="cell-label">DATE/S</span>
         <span style={valueStyle}>{project.dates || ''}</span>
       </span>
       <span className="projects-cell">
-        <span style={{ marginRight: '1rem', textTransform: 'uppercase', textDecoration: 'none' }}>NAME</span>
+        <span className="cell-label">NAME</span>
         <span style={valueStyle}>{project.name || ''}</span>
       </span>
       <span className="projects-cell">
-        <span style={{ marginRight: '1rem', textTransform: 'uppercase', textDecoration: 'none' }}>TYPE/S</span>
+        <span className="cell-label">TYPE/S</span>
         <span style={valueStyle}>{project.types || ''}</span>
       </span>
       <span className="projects-cell">
-        <span style={{ marginRight: '1rem', textTransform: 'uppercase', textDecoration: 'none' }}>FOR</span>
+        <span className="cell-label">FOR</span>
         <span style={valueStyle}>{project.for || ''}</span>
       </span>
       <span className="projects-cell">
-        <span style={{ marginRight: '1rem', textTransform: 'uppercase', textDecoration: 'none' }}>WITH</span>
+        <span className="cell-label">WITH</span>
         <span style={valueStyle}>{project.with || ''}</span>
       </span>
     </>

@@ -190,7 +190,7 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
       {hasFeaturedImages && (
         <div className="project-media-section">
           <div className="project-media-header">
-            <span className="project-media-label">MEDIA</span>
+            <span className="project-media-label">MEDIA<span className="mobile-swipe-hint"> (swipe for more)</span></span>
             <span className="project-media-type-label">Featured Images</span>
             <span className="project-media-counter">
               {currentImageIndex + 1}/{data.featuredImages!.length}
