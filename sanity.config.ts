@@ -10,18 +10,18 @@ import {structureTool} from 'sanity/structure'
 import {media} from 'sanity-plugin-media'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-import {apiVersion, dataset, projectId} from './sanity/env'
 import {schema} from './sanity/schemaTypes'
 import {structure} from './sanity/structure'
 
 // Hardcoded values for deployed studio
-const SANITY_PROJECT_ID = 'uywgcxdd'
-const SANITY_DATASET = 'production'
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'uywgcxdd'
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2026-02-02'
 
 export default defineConfig({
   basePath: '/studio',
-  projectId: projectId || SANITY_PROJECT_ID,
-  dataset: dataset || SANITY_DATASET,
+  projectId,
+  dataset,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
   plugins: [
