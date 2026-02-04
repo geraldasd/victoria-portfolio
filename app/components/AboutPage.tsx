@@ -44,6 +44,7 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
   const [isClosing, setIsClosing] = useState(false)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
 
   const handleClose = () => {
     setIsClosing(true)
@@ -73,11 +74,15 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
     const isRightSwipe = distance < -minSwipeDistance
     
     if (isLeftSwipe) {
-      // Swipe left - next image
+      // Swipe left - next image (slide in from right)
+      setSwipeDirection('left')
+      setTimeout(() => setSwipeDirection(null), 300)
       setCurrentImageIndex(prev => prev < data.featuredImages!.length - 1 ? prev + 1 : 0)
     }
     if (isRightSwipe) {
-      // Swipe right - previous image
+      // Swipe right - previous image (slide in from left)
+      setSwipeDirection('right')
+      setTimeout(() => setSwipeDirection(null), 300)
       setCurrentImageIndex(prev => prev > 0 ? prev - 1 : data.featuredImages!.length - 1)
     }
     
@@ -198,7 +203,7 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
               onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
             >
-              <div>
+              <div className={swipeDirection === 'left' ? 'slide-in-right' : swipeDirection === 'right' ? 'slide-in-left' : ''}>
                 {data.featuredImages![currentImageIndex].image && (
                   <img
                     src={urlFor(data.featuredImages![currentImageIndex].image).width(1600).quality(90).url()}
