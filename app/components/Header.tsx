@@ -34,7 +34,7 @@ const portableTextComponents = {
 function StickyHeader({ show }: { show: boolean }) {
   return (
     <div 
-      className={`sticky-header fixed top-0 left-0 right-0 z-10 w-full flex p-8 justify-between transition-opacity duration-300 ${
+      className={`sticky-header fixed top-0 left-0 right-0 z-10 w-full header-content flex justify-between transition-opacity duration-300 ${
         show ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
       style={{
@@ -72,7 +72,7 @@ export default function Header({ data }: { data: any }) {
   return (
     <>
       <StickyHeader show={showSticky} />
-      <header className="header-text p-8">
+      <header className="header-text header-content">
         <PortableText value={data.introText} components={portableTextComponents} />
       </header>
     </>
