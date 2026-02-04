@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-
 interface FooterData {
   logo?: string;
   company?: string;
@@ -12,27 +10,6 @@ interface FooterData {
 }
 
 export default function Footer({ data }: { data: FooterData | null }) {
-  const logoRef = useRef<HTMLDivElement>(null);
-  const [fontSize, setFontSize] = useState('10vw');
-
-  useEffect(() => {
-    const calculateFontSize = () => {
-      if (!logoRef.current || !data?.logo) return;
-      
-      const containerWidth = logoRef.current.parentElement?.clientWidth || window.innerWidth;
-      const letterCount = data.logo.length;
-      // Calculate font size to fit all letters with some spacing
-      // Account for padding (approx 4rem = ~64px on each side)
-      const availableWidth = containerWidth - 64;
-      const targetSize = availableWidth / (letterCount * 0.65); // 0.65 accounts for letter width ratio
-      setFontSize(`${targetSize}px`);
-    };
-
-    calculateFontSize();
-    window.addEventListener('resize', calculateFontSize);
-    return () => window.removeEventListener('resize', calculateFontSize);
-  }, [data?.logo]);
-
   if (!data) return null;
 
   // Split logo into individual characters for spacing
@@ -42,7 +19,7 @@ export default function Footer({ data }: { data: FooterData | null }) {
     <footer className="footer">
       {/* Large Logo Text - Letters spread across full width */}
       {logoLetters.length > 0 && (
-        <div className="footer-logo" ref={logoRef} style={{ fontSize }}>
+        <div className="footer-logo">
           {logoLetters.map((letter, index) => (
             <span key={index}>{letter}</span>
           ))}
