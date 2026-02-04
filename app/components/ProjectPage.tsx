@@ -48,6 +48,8 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
   const [modelsIndex, setModelsIndex] = useState(0)
   const [drawingsIndex, setDrawingsIndex] = useState(0)
   const [isClosing, setIsClosing] = useState(false)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
 
   const handleClose = () => {
     setIsClosing(true)
@@ -55,6 +57,35 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
     setTimeout(() => {
       router.back()
     }, 400) // Match animation duration
+  }
+
+  // Swipe handlers
+  const minSwipeDistance = 50
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(0)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = (type: MediaType, itemsLength: number, setIndex: React.Dispatch<React.SetStateAction<number>>) => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+    
+    if (isLeftSwipe) {
+      // Swipe left - next image
+      setIndex(prev => prev < itemsLength - 1 ? prev + 1 : 0)
+    }
+    if (isRightSwipe) {
+      // Swipe right - previous image
+      setIndex(prev => prev > 0 ? prev - 1 : itemsLength - 1)
+    }
   }
 
   // Helper to render a table row
@@ -136,7 +167,12 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
               style={{ cursor: project.photographyRenders!.length > 1 ? 'url(/arrow-left.svg?v=2) 200 200, pointer' : 'default' }}
             >
             </button>
-            <div className="project-media-image-container">
+            <div 
+              className="project-media-image-container"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={() => onTouchEnd('photography', project.photographyRenders!.length, setPhotographyIndex)}
+            >
               <div>
                 {project.photographyRenders![photographyIndex].image && (
                   <img
@@ -181,7 +217,12 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
               style={{ cursor: project.models!.length > 1 ? 'url(/arrow-left.svg?v=2) 200 200, pointer' : 'default' }}
             >
             </button>
-            <div className="project-media-image-container">
+            <div 
+              className="project-media-image-container"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={() => onTouchEnd('models', project.models!.length, setModelsIndex)}
+            >
               <div>
                 {project.models![modelsIndex].image && (
                   <img
@@ -226,7 +267,12 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
               style={{ cursor: project.drawings!.length > 1 ? 'url(/arrow-left.svg?v=2) 200 200, pointer' : 'default' }}
             >
             </button>
-            <div className="project-media-image-container">
+            <div 
+              className="project-media-image-container"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={() => onTouchEnd('drawings', project.drawings!.length, setDrawingsIndex)}
+            >
               <div>
                 {project.drawings![drawingsIndex].image && (
                   <img

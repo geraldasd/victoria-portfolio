@@ -42,6 +42,8 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
   const router = useRouter()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isClosing, setIsClosing] = useState(false)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
 
   const handleClose = () => {
     setIsClosing(true)
@@ -49,6 +51,35 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
     setTimeout(() => {
       router.back()
     }, 400) // Match animation duration
+  }
+
+  // Swipe handlers
+  const minSwipeDistance = 50
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(0)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+    
+    if (isLeftSwipe) {
+      // Swipe left - next image
+      setCurrentImageIndex(prev => prev < data.featuredImages!.length - 1 ? prev + 1 : 0)
+    }
+    if (isRightSwipe) {
+      // Swipe right - previous image
+      setCurrentImageIndex(prev => prev > 0 ? prev - 1 : data.featuredImages!.length - 1)
+    }
   }
 
   const hasFeaturedImages = (data?.featuredImages?.length || 0) > 0
@@ -157,7 +188,12 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
               style={{ cursor: data.featuredImages!.length > 1 ? 'url(/arrow-left.svg?v=2) 200 200, pointer' : 'default' }}
             >
             </button>
-            <div className="project-media-image-container">
+            <div 
+              className="project-media-image-container"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
               <div>
                 {data.featuredImages![currentImageIndex].image && (
                   <img
