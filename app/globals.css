@@ -427,18 +427,21 @@
     position: relative;
     display: flex;
     align-items: center;
+    isolation: isolate;
   }
 
   .project-media-image-container {
     flex: 1;
     display: flex;
     justify-content: flex-start;
-    touch-action: none;
+    touch-action: pan-x;
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     cursor: grab;
     overflow: hidden;
+    position: relative;
+    z-index: 1;
   }
 
   .project-media-image-container:active {
@@ -468,10 +471,18 @@
     font-size: 1.5rem;
     color: black;
     padding: 0 1rem;
+    z-index: 2;
+    pointer-events: none;
   }
 
-  .project-media-nav:hover {
-    opacity: 1;
+  @media (hover: hover) {
+    .project-media-nav {
+      pointer-events: all;
+    }
+
+    .project-media-nav:hover {
+      opacity: 1;
+    }
   }
 
   .project-media-nav--prev {
