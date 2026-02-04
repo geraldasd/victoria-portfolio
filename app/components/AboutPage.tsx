@@ -79,7 +79,7 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
       setTimeout(() => setSwipeDirection(null), 300)
       setCurrentImageIndex(prev => prev < data.featuredImages!.length - 1 ? prev + 1 : 0)
     }
-    if (isRightSwipe) {
+    else if (isRightSwipe) {
       // Swipe right - previous image (slide in from left)
       setSwipeDirection('right')
       setTimeout(() => setSwipeDirection(null), 300)

@@ -85,7 +85,7 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
       setTimeout(() => setSwipeDirection(null), 300)
       setIndex(prev => prev < itemsLength - 1 ? prev + 1 : 0)
     }
-    if (isRightSwipe) {
+    else if (isRightSwipe) {
       // Swipe right - previous image (slide in from left)
       setSwipeDirection('right')
       setTimeout(() => setSwipeDirection(null), 300)
