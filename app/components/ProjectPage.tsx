@@ -50,7 +50,9 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
   const [isClosing, setIsClosing] = useState(false)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
-  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
+  const [photographySwipe, setPhotographySwipe] = useState<'left' | 'right' | null>(null)
+  const [modelsSwipe, setModelsSwipe] = useState<'left' | 'right' | null>(null)
+  const [drawingsSwipe, setDrawingsSwipe] = useState<'left' | 'right' | null>(null)
 
   const handleClose = () => {
     setIsClosing(true)
@@ -78,6 +80,8 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
     const distance = touchStart - touchEnd
     const isLeftSwipe = distance > minSwipeDistance
     const isRightSwipe = distance < -minSwipeDistance
+    
+    const setSwipeDirection = type === 'photography' ? setPhotographySwipe : type === 'models' ? setModelsSwipe : setDrawingsSwipe
     
     if (isLeftSwipe) {
       // Swipe left - next image (slide in from right)
@@ -182,7 +186,7 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
               onTouchMove={onTouchMove}
               onTouchEnd={() => onTouchEnd('photography', project.photographyRenders!.length, setPhotographyIndex)}
             >
-              <div className={swipeDirection === 'left' ? 'slide-in-right' : swipeDirection === 'right' ? 'slide-in-left' : ''}>
+              <div className={photographySwipe === 'left' ? 'slide-in-right' : photographySwipe === 'right' ? 'slide-in-left' : ''}>
                 {project.photographyRenders![photographyIndex].image && (
                   <img
                     src={urlFor(project.photographyRenders![photographyIndex].image).width(1600).quality(90).url()}
@@ -232,7 +236,7 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
               onTouchMove={onTouchMove}
               onTouchEnd={() => onTouchEnd('models', project.models!.length, setModelsIndex)}
             >
-              <div className={swipeDirection === 'left' ? 'slide-in-right' : swipeDirection === 'right' ? 'slide-in-left' : ''}>
+              <div className={modelsSwipe === 'left' ? 'slide-in-right' : modelsSwipe === 'right' ? 'slide-in-left' : ''}>
                 {project.models![modelsIndex].image && (
                   <img
                     src={urlFor(project.models![modelsIndex].image).width(1600).quality(90).url()}
@@ -282,7 +286,7 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
               onTouchMove={onTouchMove}
               onTouchEnd={() => onTouchEnd('drawings', project.drawings!.length, setDrawingsIndex)}
             >
-              <div className={swipeDirection === 'left' ? 'slide-in-right' : swipeDirection === 'right' ? 'slide-in-left' : ''}>
+              <div className={drawingsSwipe === 'left' ? 'slide-in-right' : drawingsSwipe === 'right' ? 'slide-in-left' : ''}>
                 {project.drawings![drawingsIndex].image && (
                   <img
                     src={urlFor(project.drawings![drawingsIndex].image).width(1600).quality(90).url()}
