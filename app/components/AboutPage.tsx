@@ -69,6 +69,13 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return
     
+    // Don't allow swiping if there's only one image
+    if (!data?.featuredImages || data.featuredImages.length <= 1) {
+      setTouchStart(0)
+      setTouchEnd(0)
+      return
+    }
+    
     const distance = touchStart - touchEnd
     const isLeftSwipe = distance > minSwipeDistance
     const isRightSwipe = distance < -minSwipeDistance

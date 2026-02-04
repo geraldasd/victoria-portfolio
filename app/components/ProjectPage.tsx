@@ -77,6 +77,13 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
   const onTouchEnd = (type: MediaType, itemsLength: number, setIndex: React.Dispatch<React.SetStateAction<number>>) => {
     if (!touchStart || !touchEnd) return
     
+    // Don't allow swiping if there's only one image
+    if (itemsLength <= 1) {
+      setTouchStart(0)
+      setTouchEnd(0)
+      return
+    }
+    
     const distance = touchStart - touchEnd
     const isLeftSwipe = distance > minSwipeDistance
     const isRightSwipe = distance < -minSwipeDistance

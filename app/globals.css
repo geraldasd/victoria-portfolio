@@ -93,8 +93,8 @@
 
   .projects-row {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.25rem 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 0;
     align-items: start;
     text-decoration: none;
     color: black;
@@ -137,6 +137,13 @@
 
   .projects-cell {
     display: inline;
+  }
+
+  @media (max-width: 767px) {
+    .projects-cell {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
   }
 
   .cell-label {
@@ -259,8 +266,8 @@
 
   @keyframes slideInFromRight {
     from {
-      transform: translateX(100%);
-      opacity: 0;
+      transform: translateX(20%);
+      opacity: 0.5;
     }
     to {
       transform: translateX(0);
@@ -270,8 +277,8 @@
 
   @keyframes slideInFromLeft {
     from {
-      transform: translateX(-100%);
-      opacity: 0;
+      transform: translateX(-20%);
+      opacity: 0.5;
     }
     to {
       transform: translateX(0);
