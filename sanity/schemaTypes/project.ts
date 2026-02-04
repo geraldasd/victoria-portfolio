@@ -172,21 +172,111 @@ export default defineType({
       name: 'photographyRenders',
       title: 'Photography/Renders',
       type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: { hotspot: true },
+            },
+            {
+              name: 'caption',
+              title: 'Caption',
+              type: 'text',
+              description: 'Optional caption for this image',
+            },
+          ],
+          preview: {
+            select: {
+              media: 'image',
+              caption: 'caption',
+            },
+            prepare({ media, caption }) {
+              return {
+                title: caption || 'Untitled',
+                media,
+              }
+            },
+          },
+        },
+      ],
       description: 'Photography or render images',
     }),
     defineField({
       name: 'models',
       title: 'Models',
       type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: { hotspot: true },
+            },
+            {
+              name: 'caption',
+              title: 'Caption',
+              type: 'text',
+              description: 'Optional caption for this image',
+            },
+          ],
+          preview: {
+            select: {
+              media: 'image',
+              caption: 'caption',
+            },
+            prepare({ media, caption }) {
+              return {
+                title: caption || 'Untitled',
+                media,
+              }
+            },
+          },
+        },
+      ],
       description: 'Model images',
     }),
     defineField({
       name: 'drawings',
       title: 'Drawings',
       type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'image',
+              title: 'Image',
+              type: 'image',
+              options: { hotspot: true },
+            },
+            {
+              name: 'caption',
+              title: 'Caption',
+              type: 'text',
+              description: 'Optional caption for this image',
+            },
+          ],
+          preview: {
+            select: {
+              media: 'image',
+              caption: 'caption',
+            },
+            prepare({ media, caption }) {
+              return {
+                title: caption || 'Untitled',
+                media,
+              }
+            },
+          },
+        },
+      ],
       description: 'Drawing images',
     }),
   ],

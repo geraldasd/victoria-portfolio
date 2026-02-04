@@ -27,7 +27,7 @@ export default async function Home() {
   const footerData = await getFooterData();
   
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen home-content">
       <Header data={data} />
       <ProjectsTable projects={projects} />
       <Footer data={footerData} />

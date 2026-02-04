@@ -28,21 +28,43 @@ async function getProject(slug: string) {
     consult,
     awards,
     published,
-    photographyRenders,
-    models,
-    drawings
+    photographyRenders[]{
+      _key,
+      image,
+      caption
+    },
+    models[]{
+      _key,
+      image,
+      caption
+    },
+    drawings[]{
+      _key,
+      image,
+      caption
+    }
   }`
   
   return client.fetch(query, { slug })
 }
 
+async function getFooterData() {
+  const data = await client.fetch(`*[_type == "footer" && _id == "footer"][0]`)
+  return data
+}
+
 export default async function Page({ params }: PageProps) {
   const { slug } = await params
   const project = await getProject(slug)
+  const footerData = await getFooterData()
   
   if (!project) {
     notFound()
   }
   
-  return <ProjectPage project={project} />
+  return (
+    <>
+      <ProjectPage project={project} footerData={footerData} />
+    </>
+  )
 }

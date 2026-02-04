@@ -11,9 +11,19 @@
   }
   
   html, body {
-    overflow-x: hidden;
-    max-width: 100vw;
+    margin: 0;
+    padding: 0;
     font-family: var(--font-monument-mono);
+  }
+
+  ::selection {
+    background-color: rgb(255 255 153);
+    opacity: 1;
+  }
+
+  ::-moz-selection {
+    background-color: rgb(255 255 153);
+    opacity: 1;
   }
 }
 
@@ -208,16 +218,85 @@
   }
 
   /* Project Page */
+  @keyframes slideUp {
+    from {
+      transform: translateY(100vh);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100vh);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .home-content {
+    animation: fadeIn 0.5s ease-in forwards;
+  }
+
   .project-page {
     padding: clamp(1.5rem, 1rem + 2vw, 2rem);
     min-height: 100vh;
+    animation: slideUp 0.4s ease-out forwards;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 100;
+  }
+
+  .project-page--closing {
+    animation: slideDown 0.4s ease-out forwards;
+  }
+
+  .project-close-sticky {
+    position: fixed;
+    top: clamp(1.5rem, 1rem + 2vw, 2rem);
+    right: clamp(1.5rem, 1rem + 2vw, 2rem);
+    z-index: 10000;
+    font-family: var(--font-monument);
+    font-size: clamp(1.25rem, 0.9rem + 1.5vw, 2rem);
+    line-height: 1.1;
+    letter-spacing: 0.0075em;
+    font-weight: bold;
+    background: white;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+    padding: 0;
+    color: black;
+    pointer-events: all;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .project-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: clamp(1rem, 0.5rem + 1vw, 1.5rem);
+    padding-bottom: clamp(1rem, 0.5rem + 1vw, 1.5rem);
+    margin-bottom: 0;
   }
 
   .project-name {
@@ -227,25 +306,9 @@
     letter-spacing: 0.0075em;
     font-weight: bold;
     margin: 0;
+    max-width: calc(100% - 100px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  .project-close {
-    font-family: var(--font-monument-mono);
-    font-size: clamp(0.7rem, 0.6rem + 0.4vw, 0.875rem);
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
-    padding: 0;
-    color: black;
-  }
-
-  .project-close:hover {
-    opacity: 0.7;
   }
 
   .project-caption {
@@ -273,7 +336,7 @@
 
   @media (min-width: 768px) {
     .project-details {
-      grid-template-columns: 1fr 1.5fr 1.5fr;
+      grid-template-columns: 1fr 1fr 3fr;
       gap: clamp(2rem, 1.5rem + 2vw, 4rem);
     }
   }
@@ -299,23 +362,18 @@
     flex: 1;
   }
 
-  /* Project Media Section */
-  .project-media {
-    margin-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+  /* Project Media Sections */
+  .project-media-section {
+    margin-top: clamp(3rem, 2.5rem + 2vw, 4rem);
   }
 
   .project-media-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: clamp(0.5rem, 0.25rem + 0.5vw, 1rem);
     font-family: var(--font-monument-mono);
     font-size: clamp(0.7rem, 0.6rem + 0.4vw, 0.875rem);
-  }
-
-  .project-media-types {
-    display: flex;
-    align-items: center;
     gap: 1.5rem;
   }
 
@@ -323,23 +381,8 @@
     text-transform: uppercase;
   }
 
-  .project-media-type {
-    background: none;
-    border: none;
-    padding: 0;
-    font-family: var(--font-monument-mono);
-    font-size: clamp(0.7rem, 0.6rem + 0.4vw, 0.875rem);
-    cursor: pointer;
-    color: black;
-    opacity: 0.5;
-  }
-
-  .project-media-type:hover {
-    opacity: 0.8;
-  }
-
-  .project-media-type.active {
-    opacity: 1;
+  .project-media-type-label {
+    flex: 1;
   }
 
   .project-media-counter {

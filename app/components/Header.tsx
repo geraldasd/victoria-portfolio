@@ -3,6 +3,7 @@
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 async function getHeaderData() {
   const data = await client.fetch(`*[_type == "header"][0]`);
@@ -40,7 +41,9 @@ function StickyHeader({ show }: { show: boolean }) {
         fontSize: 'clamp(1.25rem, 0.9rem + 1.5vw, 2rem)',
       }}
     >
-      <p className="cursor-pointer" style={{ margin: 0 }}>Victoria Chen</p>
+      <Link href="/" className="cursor-pointer hover:opacity-70" style={{ margin: 0 }}>
+        Victoria Chen
+      </Link>
     </div>
   );
 }

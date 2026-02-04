@@ -3,6 +3,13 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { urlFor } from '@/sanity/lib/image'
+import Footer from './Footer'
+
+interface MediaItem {
+  _key: string
+  image: { asset: { _ref: string } }
+  caption?: string
+}
 
 interface Project {
   _id: string
@@ -23,55 +30,31 @@ interface Project {
   consult?: string
   awards?: string
   published?: string
-  photographyRenders?: Array<{ _key: string; asset: { _ref: string } }>
-  models?: Array<{ _key: string; asset: { _ref: string } }>
-  drawings?: Array<{ _key: string; asset: { _ref: string } }>
+  photographyRenders?: MediaItem[]
+  models?: MediaItem[]
+  drawings?: MediaItem[]
 }
 
 interface ProjectPageProps {
   project: Project
+  footerData: any
 }
 
 type MediaType = 'photography' | 'models' | 'drawings'
 
-export default function ProjectPage({ project }: ProjectPageProps) {
+export default function ProjectPage({ project, footerData }: ProjectPageProps) {
   const router = useRouter()
-  const [activeMedia, setActiveMedia] = useState<MediaType>('photography')
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [photographyIndex, setPhotographyIndex] = useState(0)
+  const [modelsIndex, setModelsIndex] = useState(0)
+  const [drawingsIndex, setDrawingsIndex] = useState(0)
+  const [isClosing, setIsClosing] = useState(false)
 
   const handleClose = () => {
-    router.back()
-  }
-
-  // Get current media array based on active type
-  const getMediaArray = () => {
-    switch (activeMedia) {
-      case 'photography':
-        return project.photographyRenders || []
-      case 'models':
-        return project.models || []
-      case 'drawings':
-        return project.drawings || []
-      default:
-        return []
-    }
-  }
-
-  const mediaArray = getMediaArray()
-  const totalImages = mediaArray.length
-  const currentImage = mediaArray[currentIndex]
-
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalImages - 1))
-  }
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev < totalImages - 1 ? prev + 1 : 0))
-  }
-
-  const handleMediaTypeChange = (type: MediaType) => {
-    setActiveMedia(type)
-    setCurrentIndex(0)
+    setIsClosing(true)
+    // Wait for animation to complete before navigating
+    setTimeout(() => {
+      router.back()
+    }, 400) // Match animation duration
   }
 
   // Helper to render a table row
@@ -92,14 +75,17 @@ export default function ProjectPage({ project }: ProjectPageProps) {
   const hasAnyMedia = hasPhotography || hasModels || hasDrawings
 
   return (
-    <div className="project-page">
-      {/* Header */}
-      <div className="project-header">
-        <h1 className="project-name">{project.name}</h1>
-        <button onClick={handleClose} className="project-close">
-          Close
-        </button>
-      </div>
+    <>
+      {/* Sticky Close Button - outside project-page for proper fixed positioning */}
+      <button onClick={handleClose} className="project-close-sticky">
+        Close
+      </button>
+      
+      <div className={`project-page ${isClosing ? 'project-page--closing' : ''}`}>
+        {/* Header */}
+        <div className="project-header">
+          <h1 className="project-name">{project.name}</h1>
+        </div>
 
       {/* Caption */}
       {project.caption && (
@@ -132,72 +118,144 @@ export default function ProjectPage({ project }: ProjectPageProps) {
         </div>
       </div>
 
-      {/* Media Section */}
-      {hasAnyMedia && (
-        <div className="project-media">
+      {/* Photography Section */}
+      {hasPhotography && (
+        <div className="project-media-section">
           <div className="project-media-header">
-            <div className="project-media-types">
-              <span className="project-media-label">MEDIA</span>
-              {hasPhotography && (
-                <button
-                  onClick={() => handleMediaTypeChange('photography')}
-                  className={`project-media-type ${activeMedia === 'photography' ? 'active' : ''}`}
-                >
-                  Photography
-                </button>
-              )}
-              {hasModels && (
-                <button
-                  onClick={() => handleMediaTypeChange('models')}
-                  className={`project-media-type ${activeMedia === 'models' ? 'active' : ''}`}
-                >
-                  Models
-                </button>
-              )}
-              {hasDrawings && (
-                <button
-                  onClick={() => handleMediaTypeChange('drawings')}
-                  className={`project-media-type ${activeMedia === 'drawings' ? 'active' : ''}`}
-                >
-                  Drawings
-                </button>
-              )}
-            </div>
-            {totalImages > 0 && (
-              <span className="project-media-counter">
-                {currentIndex + 1}/{totalImages}
-              </span>
-            )}
+            <span className="project-media-label">MEDIA</span>
+            <span className="project-media-type-label">Photography</span>
+            <span className="project-media-counter">
+              {photographyIndex + 1}/{project.photographyRenders!.length}
+            </span>
           </div>
-
-          {/* Image Display */}
-          {currentImage && (
-            <div className="project-media-viewer">
-              <button 
-                onClick={handlePrevious} 
-                className="project-media-nav project-media-nav--prev"
-                aria-label="Previous image"
-              >
-                <span>←</span>
-              </button>
-              <div className="project-media-image-container">
-                <img
-                  src={urlFor(currentImage).width(1600).quality(90).url()}
-                  alt={`${project.name} - ${activeMedia} ${currentIndex + 1}`}
-                  className="project-media-image"
-                />
+          <div className="project-media-viewer">
+            <button 
+              onClick={() => setPhotographyIndex(prev => prev > 0 ? prev - 1 : project.photographyRenders!.length - 1)}
+              className={`project-media-nav project-media-nav--prev ${project.photographyRenders!.length > 1 ? 'has-navigation' : ''}`}
+              aria-label="Previous image"
+              style={{ cursor: project.photographyRenders!.length > 1 ? 'url(/arrow-left.svg?v=2) 200 200, pointer' : 'default' }}
+            >
+            </button>
+            <div className="project-media-image-container">
+              <div>
+                {project.photographyRenders![photographyIndex].image && (
+                  <img
+                    src={urlFor(project.photographyRenders![photographyIndex].image).width(1600).quality(90).url()}
+                    alt={`${project.name} - Photography ${photographyIndex + 1}`}
+                    className="project-media-image"
+                  />
+                )}
+                {project.photographyRenders![photographyIndex].caption && (
+                  <p className="header-text" style={{ marginTop: '1rem' }}>
+                    {project.photographyRenders![photographyIndex].caption}
+                  </p>
+                )}
               </div>
-              <button 
-                onClick={handleNext} 
-                className="project-media-nav project-media-nav--next"
-                aria-label="Next image"
-              >
-                <span>→</span>
-              </button>
             </div>
-          )}
+            <button 
+              onClick={() => setPhotographyIndex(prev => prev < project.photographyRenders!.length - 1 ? prev + 1 : 0)}
+              className={`project-media-nav project-media-nav--next ${project.photographyRenders!.length > 1 ? 'has-navigation' : ''}`}
+              aria-label="Next image"
+              style={{ cursor: project.photographyRenders!.length > 1 ? 'url(/arrow.svg?v=2) 200 200, pointer' : 'default' }}
+            >
+            </button>
+          </div>
         </div>
       )}
-    </div>
+
+      {/* Models Section */}
+      {hasModels && (
+        <div className="project-media-section">
+          <div className="project-media-header">
+            <span className="project-media-label">MEDIA</span>
+            <span className="project-media-type-label">Models</span>
+            <span className="project-media-counter">
+              {modelsIndex + 1}/{project.models!.length}
+            </span>
+          </div>
+          <div className="project-media-viewer">
+            <button 
+              onClick={() => setModelsIndex(prev => prev > 0 ? prev - 1 : project.models!.length - 1)}
+              className={`project-media-nav project-media-nav--prev ${project.models!.length > 1 ? 'has-navigation' : ''}`}
+              aria-label="Previous image"
+              style={{ cursor: project.models!.length > 1 ? 'url(/arrow-left.svg?v=2) 200 200, pointer' : 'default' }}
+            >
+            </button>
+            <div className="project-media-image-container">
+              <div>
+                {project.models![modelsIndex].image && (
+                  <img
+                    src={urlFor(project.models![modelsIndex].image).width(1600).quality(90).url()}
+                    alt={`${project.name} - Models ${modelsIndex + 1}`}
+                    className="project-media-image"
+                  />
+                )}
+                {project.models![modelsIndex].caption && (
+                  <p className="header-text" style={{ marginTop: '1rem' }}>
+                    {project.models![modelsIndex].caption}
+                  </p>
+                )}
+              </div>
+            </div>
+            <button 
+              onClick={() => setModelsIndex(prev => prev < project.models!.length - 1 ? prev + 1 : 0)}
+              className={`project-media-nav project-media-nav--next ${project.models!.length > 1 ? 'has-navigation' : ''}`}
+              aria-label="Next image"
+              style={{ cursor: project.models!.length > 1 ? 'url(/arrow.svg?v=2) 200 200, pointer' : 'default' }}
+            >
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Drawings Section */}
+      {hasDrawings && (
+        <div className="project-media-section">
+          <div className="project-media-header">
+            <span className="project-media-label">MEDIA</span>
+            <span className="project-media-type-label">Drawings</span>
+            <span className="project-media-counter">
+              {drawingsIndex + 1}/{project.drawings!.length}
+            </span>
+          </div>
+          <div className="project-media-viewer">
+            <button 
+              onClick={() => setDrawingsIndex(prev => prev > 0 ? prev - 1 : project.drawings!.length - 1)}
+              className={`project-media-nav project-media-nav--prev ${project.drawings!.length > 1 ? 'has-navigation' : ''}`}
+              aria-label="Previous image"
+              style={{ cursor: project.drawings!.length > 1 ? 'url(/arrow-left.svg?v=2) 200 200, pointer' : 'default' }}
+            >
+            </button>
+            <div className="project-media-image-container">
+              <div>
+                {project.drawings![drawingsIndex].image && (
+                  <img
+                    src={urlFor(project.drawings![drawingsIndex].image).width(1600).quality(90).url()}
+                    alt={`${project.name} - Drawings ${drawingsIndex + 1}`}
+                    className="project-media-image"
+                  />
+                )}
+                {project.drawings![drawingsIndex].caption && (
+                  <p className="header-text" style={{ marginTop: '1rem' }}>
+                    {project.drawings![drawingsIndex].caption}
+                  </p>
+                )}
+              </div>
+            </div>
+            <button 
+              onClick={() => setDrawingsIndex(prev => prev < project.drawings!.length - 1 ? prev + 1 : 0)}
+              className={`project-media-nav project-media-nav--next ${project.drawings!.length > 1 ? 'has-navigation' : ''}`}
+              aria-label="Next image"
+              style={{ cursor: project.drawings!.length > 1 ? 'url(/arrow.svg?v=2) 200 200, pointer' : 'default' }}
+            >
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {/* Footer */}
+      <Footer data={footerData} />
+      </div>
+    </>
   )
 }
