@@ -14,10 +14,14 @@ import {apiVersion, dataset, projectId} from './sanity/env'
 import {schema} from './sanity/schemaTypes'
 import {structure} from './sanity/structure'
 
+// Hardcoded values for deployed studio
+const SANITY_PROJECT_ID = 'uywgcxdd'
+const SANITY_DATASET = 'production'
+
 export default defineConfig({
   basePath: '/studio',
-  projectId,
-  dataset,
+  projectId: projectId || SANITY_PROJECT_ID,
+  dataset: dataset || SANITY_DATASET,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
   plugins: [
