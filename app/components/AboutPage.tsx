@@ -80,6 +80,10 @@ export default function AboutPage({ data, footerData }: AboutPageProps) {
       // Swipe right - previous image
       setCurrentImageIndex(prev => prev > 0 ? prev - 1 : data.featuredImages!.length - 1)
     }
+    
+    // Reset
+    setTouchStart(0)
+    setTouchEnd(0)
   }
 
   const hasFeaturedImages = (data?.featuredImages?.length || 0) > 0

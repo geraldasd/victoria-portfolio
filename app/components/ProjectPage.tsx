@@ -86,6 +86,10 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
       // Swipe right - previous image
       setIndex(prev => prev > 0 ? prev - 1 : itemsLength - 1)
     }
+    
+    // Reset
+    setTouchStart(0)
+    setTouchEnd(0)
   }
 
   // Helper to render a table row

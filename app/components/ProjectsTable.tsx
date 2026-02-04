@@ -120,7 +120,16 @@ function ProjectRow({ project }: { project: Project }) {
         >
           {content}
         </a>
-        {featuredImageContent}
+        {featuredImageContent && (
+          <a 
+            href={project.externalLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'block', cursor: 'pointer' }}
+          >
+            {featuredImageContent}
+          </a>
+        )}
       </>
     );
   }
@@ -135,7 +144,11 @@ function ProjectRow({ project }: { project: Project }) {
         <Link href={href} className="projects-row" {...hoverHandlers}>
           {content}
         </Link>
-        {featuredImageContent}
+        {featuredImageContent && (
+          <Link href={href} style={{ display: 'block', cursor: 'pointer' }}>
+            {featuredImageContent}
+          </Link>
+        )}
       </>
     );
   }
