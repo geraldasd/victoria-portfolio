@@ -177,7 +177,8 @@
 
   /* Featured Image below project row */
   .project-featured-image {
-    padding: clamp(1rem, 0.5rem + 2vw, 2rem) 0;
+    padding-top: clamp(1rem, 0.5rem + 2vw, 2rem);
+    padding-bottom: clamp(3rem, 2.5rem + 2vw, 4rem);
   }
 
   .project-featured-image img {
@@ -483,6 +484,9 @@
     overflow: hidden;
     position: relative;
     z-index: 1;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .project-media-image-container:active {

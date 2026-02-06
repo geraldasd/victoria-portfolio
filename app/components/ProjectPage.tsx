@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { urlFor } from '@/sanity/lib/image'
 import Footer from './Footer'
 
@@ -50,6 +50,7 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
   const [isClosing, setIsClosing] = useState(false)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
+  const [touchStartTime, setTouchStartTime] = useState(0)
   const [photographySwipe, setPhotographySwipe] = useState<'left' | 'right' | null>(null)
   const [modelsSwipe, setModelsSwipe] = useState<'left' | 'right' | null>(null)
   const [drawingsSwipe, setDrawingsSwipe] = useState<'left' | 'right' | null>(null)
@@ -62,12 +63,14 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
     }, 400) // Match animation duration
   }
 
-  // Swipe handlers
-  const minSwipeDistance = 50
+  // Swipe handlers - optimized for responsiveness
+  const minSwipeDistance = 30 // Reduced from 50 for faster response
+  const minSwipeVelocity = 0.3 // Velocity threshold for quick swipes
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(0)
     setTouchStart(e.targetTouches[0].clientX)
+    setTouchStartTime(Date.now())
   }
 
   const onTouchMove = (e: React.TouchEvent) => {
@@ -81,12 +84,17 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
     if (itemsLength <= 1) {
       setTouchStart(0)
       setTouchEnd(0)
+      setTouchStartTime(0)
       return
     }
     
     const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > minSwipeDistance
-    const isRightSwipe = distance < -minSwipeDistance
+    const timeDiff = Date.now() - touchStartTime
+    const velocity = Math.abs(distance) / timeDiff
+    
+    // Trigger swipe if distance OR velocity threshold is met
+    const isLeftSwipe = distance > minSwipeDistance || (distance > 0 && velocity > minSwipeVelocity)
+    const isRightSwipe = distance < -minSwipeDistance || (distance < 0 && velocity > minSwipeVelocity)
     
     const setSwipeDirection = type === 'photography' ? setPhotographySwipe : type === 'models' ? setModelsSwipe : setDrawingsSwipe
     
@@ -106,6 +114,7 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
     // Reset
     setTouchStart(0)
     setTouchEnd(0)
+    setTouchStartTime(0)
   }
 
   // Helper to render a table row
@@ -118,6 +127,28 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
       </div>
     )
   }
+
+  // Image preloading for seamless swiping
+  useEffect(() => {
+    const preloadImage = (items: MediaItem[] | undefined, index: number) => {
+      if (!items || items.length <= 1) return
+      
+      const preloadAtIndex = (idx: number) => {
+        if (idx >= 0 && idx < items.length && items[idx].image) {
+          const img = new Image()
+          img.src = urlFor(items[idx].image).width(1600).quality(90).url()
+        }
+      }
+      
+      // Preload previous and next images
+      preloadAtIndex(index - 1 >= 0 ? index - 1 : items.length - 1)
+      preloadAtIndex(index + 1 < items.length ? index + 1 : 0)
+    }
+    
+    preloadImage(project.photographyRenders, photographyIndex)
+    preloadImage(project.models, modelsIndex)
+    preloadImage(project.drawings, drawingsIndex)
+  }, [photographyIndex, modelsIndex, drawingsIndex, project.photographyRenders, project.models, project.drawings])
 
   // Check which media types have content
   const hasPhotography = (project.photographyRenders?.length || 0) > 0
