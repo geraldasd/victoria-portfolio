@@ -12,12 +12,6 @@ export default defineType({
       description: 'Large text that spans the full width (e.g., "V I C T O R I A")',
     }),
     defineField({
-      name: 'company',
-      title: 'Company',
-      type: 'string',
-      description: 'Company or name text',
-    }),
-    defineField({
       name: 'instagram',
       title: 'Instagram URL',
       type: 'url',

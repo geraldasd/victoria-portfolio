@@ -28,10 +28,6 @@ export default function Footer({ data }: { data: FooterData | null }) {
 
       {/* Footer Info Row - spread across full width */}
       <div className="footer-info">
-        {data.company && (
-          <span className="footer-item">{data.company}</span>
-        )}
-
         {data.instagram && (
           <a 
             href={data.instagram} 
