@@ -151,7 +151,7 @@
     text-transform: uppercase;
     margin-right: 0.75em;
     text-decoration: none !important;
-    font-weight: bold ;
+    font-weight: normal;
   }
 
   @media (max-width: 767px) {
@@ -159,7 +159,7 @@
       display: block;
       margin-right: 0;
       margin-bottom: 0;
-      font-weight: normal !important;
+      font-weight: bold !important;
     }
   }
 
