@@ -151,6 +151,7 @@
     text-transform: uppercase;
     margin-right: 0.75em;
     text-decoration: none !important;
+    font-weight: bold;
   }
 
   @media (max-width: 767px) {
