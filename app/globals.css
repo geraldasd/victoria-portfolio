@@ -469,6 +469,44 @@
     pointer-events: none;
   }
 
+  /* Gallery frame: positions the LQIP blur layer behind the sharp image */
+  .media-gallery-frame {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  /* LQIP blur backdrop — shows instantly while the sharp image decodes */
+  .media-gallery-lqip {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px);
+    transform: scale(1.1);
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
+    pointer-events: none;
+  }
+
+  .media-gallery-lqip--hidden {
+    opacity: 0;
+  }
+
+  /* Fade-in for the sharp image once decoded (onLoad) */
+  .project-media-image--fade {
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .project-media-image--loaded {
+    opacity: 1;
+  }
+
   .project-media-nav {
     position: absolute;
     top: 0;

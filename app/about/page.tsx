@@ -17,6 +17,8 @@ async function getAboutData() {
     featuredImages[]{
       _key,
       image,
+      "imageLqip": image.asset->metadata.lqip,
+      "imageDimensions": image.asset->metadata.dimensions,
       caption
     }
   }`
