@@ -31,16 +31,22 @@ async function getProject(slug: string) {
     photographyRenders[]{
       _key,
       image,
+      "imageLqip": image.asset->metadata.lqip,
+      "imageDimensions": image.asset->metadata.dimensions,
       caption
     },
     models[]{
       _key,
       image,
+      "imageLqip": image.asset->metadata.lqip,
+      "imageDimensions": image.asset->metadata.dimensions,
       caption
     },
     drawings[]{
       _key,
       image,
+      "imageLqip": image.asset->metadata.lqip,
+      "imageDimensions": image.asset->metadata.dimensions,
       caption
     }
   }`

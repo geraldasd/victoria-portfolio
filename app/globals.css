@@ -82,102 +82,49 @@
     padding: clamp(1.5rem, 1rem + 2vw, 2rem);
   }
 
-  /* Projects Table */
+  /* Projects Table - Two Column Grid */
   .projects-table {
     font-family: var(--font-monument-mono);
-    /* Fluid typography: scales from 0.7rem at 320px to 0.875rem at 1200px */
     font-size: clamp(0.7rem, 0.6rem + 0.4vw, 0.875rem);
     line-height: 1.4;
     color: black;
     padding: clamp(1.5rem, 1rem + 2vw, 2rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 1rem + 1vw, 2rem);
   }
 
-  .projects-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-    align-items: start;
+  @media (min-width: 768px) {
+    .projects-table {
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(2rem, 1.5rem + 2vw, 4rem);
+    }
+  }
+
+  .project-cell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-cell-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
     text-decoration: none;
     color: black;
-    cursor: pointer;
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-bottom: 1px solid transparent;
   }
 
-  @media (min-width: 768px) {
-    .projects-row {
-      grid-template-columns: 8% 10% 25% 25% 16% 16%;
-      gap: 0.5rem;
-      padding-bottom: 0;
-      margin-bottom: 0;
-      border-bottom: none;
-    }
-  }
-
-  .projects-row--header {
-    cursor: default;
-    display: none;
-  }
-
-  @media (min-width: 768px) {
-    .projects-row--header {
-      display: grid;
-    }
-  }
-
-  .projects-row--no-link {
-    cursor: default;
-  }
-
-  /* Prevent link hover from adding underline to the whole row */
-  a.projects-row,
-  a.projects-row:hover {
+  a.project-cell-data,
+  a.project-cell-data:hover {
     text-decoration: none;
+    color: black;
   }
 
-  .projects-cell {
-    display: inline;
-  }
-
-  @media (max-width: 767px) {
-    .projects-cell {
-      display: block;
-      margin-bottom: 0.125rem;
-    }
-  }
-
-  .cell-label {
-    text-transform: uppercase;
-    margin-right: 0.75em;
-    text-decoration: none !important;
-    font-weight: normal;
-  }
-
-  @media (max-width: 767px) {
-    .cell-label {
-      display: block;
-      margin-right: 0;
-      margin-bottom: 0;
-      font-weight: bold !important;
-    }
-  }
-
-  /* Clickable elements get underline on hover */
-  .sortable-header:hover {
-    text-decoration: underline !important;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
-  }
-
-  .clickable:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
+  .project-cell--link {
     cursor: pointer;
   }
 
-  /* Featured Image below project row */
+  /* Featured Image below project data */
   .project-featured-image {
     padding-top: clamp(1rem, 0.5rem + 2vw, 2rem);
     padding-bottom: clamp(3rem, 2.5rem + 2vw, 4rem);
@@ -430,9 +377,26 @@
     flex: 1;
   }
 
-  /* Project Media Sections */
-  .project-media-section {
+  /* Project Media Grid - 2-column asymmetric on desktop */
+  .project-media-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 1.5rem + 2vw, 3rem);
     margin-top: clamp(3rem, 2.5rem + 2vw, 4rem);
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .project-media-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 1.5rem + 2vw, 4rem);
+    }
+  }
+
+  /* Project Media Sections (individual) */
+  .project-media-section {
+    /* margin handled by grid gap when inside .project-media-grid */
+    margin-top: 0;
   }
 
   .project-media-header {
@@ -498,6 +462,8 @@
   .project-media-image {
     max-width: 100%;
     max-height: 70vh;
+    width: auto;
+    height: auto;
     object-fit: contain;
     display: block;
     pointer-events: none;

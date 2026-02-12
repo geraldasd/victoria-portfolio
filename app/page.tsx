@@ -12,7 +12,11 @@ async function getHeaderData() {
 }
 
 async function getProjects() {
-  const data = await client.fetch(`*[_type == "project"] | order(order asc)`);
+  const data = await client.fetch(`*[_type == "project"] | order(order asc) {
+    ...,
+    "featuredImageLqip": featuredImage.asset->metadata.lqip,
+    "featuredImageDimensions": featuredImage.asset->metadata.dimensions
+  }`);
   return data;
 }
 
