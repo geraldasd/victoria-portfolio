@@ -3,7 +3,6 @@
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 async function getHeaderData() {
   const data = await client.fetch(`*[_type == "header"][0]`);
@@ -32,6 +31,11 @@ const portableTextComponents = {
 };
 
 function StickyHeader({ show }: { show: boolean }) {
+  const handleScrollToTop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div 
       className={`sticky-header fixed top-0 left-0 right-0 z-10 w-full header-content flex justify-between transition-opacity duration-300 ${
@@ -41,9 +45,13 @@ function StickyHeader({ show }: { show: boolean }) {
         fontSize: 'clamp(1.25rem, 0.9rem + 1.5vw, 2rem)',
       }}
     >
-      <Link href="/" className="cursor-pointer hover:opacity-70" style={{ margin: 0 }}>
+      <button
+        onClick={handleScrollToTop}
+        className="cursor-pointer hover:opacity-70 bg-transparent border-none p-0 font-inherit text-left"
+        style={{ margin: 0 }}
+      >
         Victoria Chen
-      </Link>
+      </button>
     </div>
   );
 }

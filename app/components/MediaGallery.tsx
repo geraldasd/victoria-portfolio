@@ -245,12 +245,14 @@ export default function MediaGallery({
 
       {/* Viewer: prev-nav · image-container · next-nav */}
       <div className="project-media-viewer">
-        <button
-          onClick={goPrev}
-          className={`project-media-nav project-media-nav--prev ${hasNav ? 'has-navigation' : ''}`}
-          aria-label="Previous image"
-          style={{ cursor: hasNav ? 'url(/arrow-left.svg?v=2) 200 200, pointer' : 'default' }}
-        />
+        {hasNav && (
+          <button
+            onClick={goPrev}
+            className="project-media-nav project-media-nav--prev"
+            aria-label="Previous image"
+            style={{ cursor: 'url(/arrow-left.svg?v=2) 200 200, pointer' }}
+          />
+        )}
 
         <div
           className="project-media-image-container"
@@ -319,12 +321,14 @@ export default function MediaGallery({
           </div>
         </div>
 
-        <button
-          onClick={goNext}
-          className={`project-media-nav project-media-nav--next ${hasNav ? 'has-navigation' : ''}`}
-          aria-label="Next image"
-          style={{ cursor: hasNav ? 'url(/arrow.svg?v=2) 200 200, pointer' : 'default' }}
-        />
+        {hasNav && (
+          <button
+            onClick={goNext}
+            className="project-media-nav project-media-nav--next"
+            aria-label="Next image"
+            style={{ cursor: 'url(/arrow.svg?v=2) 200 200, pointer' }}
+          />
+        )}
       </div>
 
       {/* ── Invisible prefetch layer ──────────────────────────── */}
