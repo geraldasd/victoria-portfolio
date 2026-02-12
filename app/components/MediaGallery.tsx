@@ -105,6 +105,8 @@ function PrefetchImage({
 // MediaGallery — self-contained slider with neighbor preloading
 // ────────────────────────────────────────────────────────────
 
+// Keep in sync with .media-gallery-layer { transition } in globals.css
+const TRANSITION_MS = 300
 const SIZES = '(min-width: 1024px) 50vw, 100vw'
 const MIN_SWIPE_PX = 30
 const MIN_SWIPE_VEL = 0.3 // px/ms
@@ -119,9 +121,19 @@ export default function MediaGallery({
   // ── State ──────────────────────────────────────────────────
   const [currentIndex, setCurrentIndex] = useState(0)
   const [readySet, setReadySet] = useState<Set<number>>(() => new Set())
-  const [imageLoaded, setImageLoaded] = useState(false)
   const [swipeDir, setSwipeDir] = useState<'left' | 'right' | null>(null)
   const [prefetchDepth, setPrefetchDepth] = useState(2)
+
+  // ── Crossfade state ────────────────────────────────────────
+  // displayedIndex: last fully-loaded & visible image (-1 = none yet)
+  // incomingReady:  whether the target image has decoded
+  const [displayedIndex, setDisplayedIndex] = useState(-1)
+  const [incomingReady, setIncomingReady] = useState(false)
+
+  // Refs for async-safe callbacks
+  const currentIndexRef = useRef(currentIndex)
+  currentIndexRef.current = currentIndex
+  const promotionTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   // Touch tracking (local to this gallery, avoids cross-gallery bleed)
   const touchRef = useRef({ x0: 0, x1: 0, t0: 0 })
@@ -137,11 +149,26 @@ export default function MediaGallery({
     }
   }, [])
 
-  // ── When the active index changes, check the ready cache ───
+  // ── Crossfade: when target changes, check if already cached ─
   useEffect(() => {
-    setImageLoaded(readySet.has(currentIndex))
+    clearTimeout(promotionTimer.current)
+
+    if (readySet.has(currentIndex)) {
+      // Prefetched → mark ready and schedule promotion
+      setIncomingReady(true)
+      promotionTimer.current = setTimeout(() => {
+        setDisplayedIndex(currentIndex)
+      }, TRANSITION_MS + 16)
+    } else {
+      setIncomingReady(false)
+    }
+
+    return () => clearTimeout(promotionTimer.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex])
+
+  // Cleanup promotion timer on unmount
+  useEffect(() => () => clearTimeout(promotionTimer.current), [])
 
   // ── Navigation ─────────────────────────────────────────────
   const goNext = useCallback(() => {
@@ -176,10 +203,16 @@ export default function MediaGallery({
   }, [items.length, goNext, goPrev])
 
   // ── Load callbacks ─────────────────────────────────────────
-  const handleActiveLoad = useCallback(() => {
-    setImageLoaded(true)
-    setReadySet(prev => new Set(prev).add(currentIndex))
-  }, [currentIndex])
+  // Fires when the incoming (foreground) <Image> fully decodes.
+  const handleIncomingLoad = useCallback(() => {
+    const idx = currentIndexRef.current
+    setIncomingReady(true)
+    setReadySet(prev => new Set(prev).add(idx))
+    clearTimeout(promotionTimer.current)
+    promotionTimer.current = setTimeout(() => {
+      setDisplayedIndex(idx)
+    }, TRANSITION_MS + 16)
+  }, [])
 
   const handlePrefetchReady = useCallback((idx: number) => {
     setReadySet(prev => new Set(prev).add(idx))
@@ -188,7 +221,11 @@ export default function MediaGallery({
   // ── Guard ──────────────────────────────────────────────────
   if (!items?.length) return null
 
-  const active = items[currentIndex]
+  // ── Derived crossfade values ───────────────────────────────
+  const activeItem = items[currentIndex]
+  const displayedItem = displayedIndex >= 0 ? items[displayedIndex] : null
+  const isTransitioning = displayedIndex !== currentIndex
+  const showIncoming = !isTransitioning || incomingReady
   const neighbors = getNeighborIndices(currentIndex, items.length, prefetchDepth)
   const hasNav = items.length > 1
 
@@ -222,38 +259,61 @@ export default function MediaGallery({
           onTouchEnd={onTouchEnd}
         >
           <div className={swipeDir === 'left' ? 'slide-in-right' : swipeDir === 'right' ? 'slide-in-left' : ''}>
-            {active.image && (
-              <div className="media-gallery-frame">
-                {/* LQIP blur layer — instant visual while sharp image loads */}
-                {active.imageLqip && (
+            {activeItem.image && (
+              <div
+                className="media-gallery-frame"
+                style={{
+                  aspectRatio: `${activeItem.imageDimensions?.width || 1600} / ${activeItem.imageDimensions?.height || 1200}`,
+                }}
+              >
+                {/* LQIP blur layer — only on first load before any image is ready */}
+                {activeItem.imageLqip && displayedIndex < 0 && !incomingReady && (
                   <div
-                    className={`media-gallery-lqip ${imageLoaded ? 'media-gallery-lqip--hidden' : ''}`}
-                    style={{ backgroundImage: `url(${active.imageLqip})` }}
+                    className="media-gallery-lqip"
+                    style={{ backgroundImage: `url(${activeItem.imageLqip})` }}
                   />
                 )}
 
-                {/* Sharp image — fades in once decoded */}
+                {/* Background layer: last loaded image (crossfade safety net) */}
+                {isTransitioning && displayedItem?.image && (
+                  <Image
+                    key={`displayed-${displayedIndex}`}
+                    loader={sanityImageLoader}
+                    src={urlFor(displayedItem.image).url()}
+                    alt=""
+                    width={displayedItem.imageDimensions?.width || 1600}
+                    height={displayedItem.imageDimensions?.height || 1200}
+                    sizes={SIZES}
+                    quality={90}
+                    className="media-gallery-layer media-gallery-layer--visible"
+                    aria-hidden="true"
+                    draggable={false}
+                  />
+                )}
+
+                {/* Foreground layer: target image (fades in once decoded) */}
                 <Image
-                  key={`gallery-${currentIndex}`}
+                  key={`incoming-${currentIndex}`}
                   loader={sanityImageLoader}
-                  src={urlFor(active.image).url()}
+                  src={urlFor(activeItem.image).url()}
                   alt={`${projectName} - ${typeLabel} ${currentIndex + 1}`}
-                  width={active.imageDimensions?.width || 1600}
-                  height={active.imageDimensions?.height || 1200}
+                  width={activeItem.imageDimensions?.width || 1600}
+                  height={activeItem.imageDimensions?.height || 1200}
                   sizes={SIZES}
                   placeholder="empty"
                   quality={90}
                   priority={prioritize && currentIndex === 0}
                   loading="eager"
-                  onLoad={handleActiveLoad}
-                  className={`project-media-image project-media-image--fade ${imageLoaded ? 'project-media-image--loaded' : ''}`}
+                  onLoad={handleIncomingLoad}
+                  className={`media-gallery-layer ${showIncoming ? 'media-gallery-layer--visible' : ''}`}
+                  draggable={false}
                 />
               </div>
             )}
 
-            {active.caption && (
+            {activeItem.caption && (
               <p className="header-text" style={{ marginTop: '1rem' }}>
-                {active.caption}
+                {activeItem.caption}
               </p>
             )}
           </div>

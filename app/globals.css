@@ -233,22 +233,18 @@
   @keyframes slideInFromRight {
     from {
       transform: translateX(20%);
-      opacity: 0.5;
     }
     to {
       transform: translateX(0);
-      opacity: 1;
     }
   }
 
   @keyframes slideInFromLeft {
     from {
       transform: translateX(-20%);
-      opacity: 0.5;
     }
     to {
       transform: translateX(0);
-      opacity: 1;
     }
   }
 
@@ -469,41 +465,51 @@
     pointer-events: none;
   }
 
-  /* Gallery frame: positions the LQIP blur layer behind the sharp image */
+  /* Gallery frame: CSS-grid stack keeps old + new images in the same cell
+     so the container never collapses between transitions. */
   .media-gallery-frame {
     position: relative;
-    display: inline-block;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     overflow: hidden;
     line-height: 0;
+    max-height: 70vh;
+    /* aspect-ratio is set via inline style per-image as a fallback */
   }
 
-  /* LQIP blur backdrop — shows instantly while the sharp image decodes */
+  .media-gallery-frame > * {
+    grid-area: 1 / 1 / -1 / -1;
+  }
+
+  /* LQIP blur backdrop — shows on first load while the initial image decodes */
   .media-gallery-lqip {
-    position: absolute;
-    inset: 0;
     z-index: 0;
     background-size: cover;
     background-position: center;
     filter: blur(20px);
     transform: scale(1.1);
-    opacity: 1;
-    transition: opacity 0.3s ease-out;
     pointer-events: none;
   }
 
-  .media-gallery-lqip--hidden {
-    opacity: 0;
-  }
-
-  /* Fade-in for the sharp image once decoded (onLoad) */
-  .project-media-image--fade {
-    position: relative;
-    z-index: 1;
+  /* Crossfade layer — used for both the "displayed" (background) and
+     "incoming" (foreground) images during gallery transitions. */
+  .media-gallery-layer {
+    max-width: 100%;
+    max-height: 70vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: left top;
+    display: block;
+    pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease-out;
+    will-change: opacity;
+    z-index: 1;
   }
 
-  .project-media-image--loaded {
+  .media-gallery-layer--visible {
     opacity: 1;
   }
 
