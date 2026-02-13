@@ -107,7 +107,7 @@ export default defineType({
       description: 'Consultants or Tutor name/s, n/a if not applicable',
     }),
     defineField({
-      name: 'awards',
+      name: 'awardsList',
       title: 'Awards',
       type: 'array',
       of: [
@@ -142,7 +142,7 @@ export default defineType({
       description: 'Awards received, with optional links',
     }),
     defineField({
-      name: 'published',
+      name: 'publicationsList',
       title: 'Published',
       type: 'array',
       of: [
