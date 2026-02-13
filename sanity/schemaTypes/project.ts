@@ -109,14 +109,72 @@ export default defineType({
     defineField({
       name: 'awards',
       title: 'Awards',
-      type: 'text',
-      description: 'Awards received, n/a if not applicable',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [{ title: 'Normal', value: 'normal' }],
+          marks: {
+            decorators: [
+              { title: 'Strong', value: 'strong' },
+              { title: 'Emphasis', value: 'em' }
+            ],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  { name: 'href', type: 'url', title: 'URL' },
+                  {
+                    name: 'reference',
+                    type: 'reference',
+                    title: 'Internal reference',
+                    to: [{ type: 'project' }]
+                  },
+                  { name: 'blank', type: 'boolean', title: 'Open in new tab', initialValue: true }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      description: 'Awards received, with optional links',
     }),
     defineField({
       name: 'published',
       title: 'Published',
-      type: 'text',
-      description: 'Publications featuring this project, n/a if not applicable',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [{ title: 'Normal', value: 'normal' }],
+          marks: {
+            decorators: [
+              { title: 'Strong', value: 'strong' },
+              { title: 'Emphasis', value: 'em' }
+            ],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  { name: 'href', type: 'url', title: 'URL' },
+                  {
+                    name: 'reference',
+                    type: 'reference',
+                    title: 'Internal reference',
+                    to: [{ type: 'project' }]
+                  },
+                  { name: 'blank', type: 'boolean', title: 'Open in new tab', initialValue: true }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      description: 'Publications featuring this project, with optional links',
     }),
     defineField({
       name: 'linkType',
