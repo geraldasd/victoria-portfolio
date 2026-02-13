@@ -26,8 +26,8 @@ async function getProject(slug: string) {
     team,
     photos,
     consult,
-    awards,
-    published,
+    awardsList,
+    publicationsList,
     photographyRenders[]{
       _key,
       image,
