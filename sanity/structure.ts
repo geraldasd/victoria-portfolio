@@ -1,5 +1,8 @@
 import type {StructureResolver} from 'sanity/structure'
 
+// Document types that are managed as singletons and should not appear in the default list
+const singletonTypes = new Set(['settings'])
+
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S) =>
   S.list()

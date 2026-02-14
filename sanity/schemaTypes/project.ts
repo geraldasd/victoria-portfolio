@@ -321,7 +321,11 @@ export default defineType({
       name: 'seo',
       title: 'SEO',
       type: 'seo',
-      description: 'SEO metadata for this project page. Overrides global defaults.',
+      description: 'Page-level SEO overrides (optional — falls back to site defaults)',
+      options: {
+        collapsible: true,
+        collapsed: true,
+      },
     }),
   ],
   orderings: [
