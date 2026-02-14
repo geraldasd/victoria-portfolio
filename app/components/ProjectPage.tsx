@@ -2,10 +2,15 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { PortableText } from '@portabletext/react'
 import MediaGallery from './MediaGallery'
 import type { MediaItem } from './MediaGallery'
 import Footer from './Footer'
+
+interface AwardOrPublication {
+  _key?: string
+  title: string
+  link?: string
+}
 
 interface Project {
   _id: string
@@ -24,8 +29,8 @@ interface Project {
   team?: string
   photos?: string
   consult?: string
-  awardsList?: any[]
-  publicationsList?: any[]
+  awards?: AwardOrPublication[]
+  published?: AwardOrPublication[]
   photographyRenders?: MediaItem[]
   models?: MediaItem[]
   drawings?: MediaItem[]
@@ -55,25 +60,29 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
     )
   }
 
-  const renderPortableTextRow = (label: string, value?: any[]) => {
-    if (!value || value.length === 0) return null
+  const renderLinkedListRow = (label: string, items?: AwardOrPublication[]) => {
+    if (!items || items.length === 0) return null
     return (
       <div className="project-detail-row">
         <span className="project-detail-label">{label}</span>
         <span className="project-detail-value">
-          <PortableText 
-            value={value} 
-            components={{
-              marks: {
-                link: ({value, children}) => {
-                  const href = value?.href || (value?.reference ? `/projects/${value.reference}` : '#')
-                  const target = value?.blank ? '_blank' : undefined
-                  const rel = target === '_blank' ? 'noopener noreferrer' : undefined
-                  return <a href={href} target={target} rel={rel}>{children}</a>
-                },
-              },
-            }}
-          />
+          {items.map((item, index) => (
+            <span key={item._key || index}>
+              {item.link ? (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="clickable"
+                >
+                  {item.title}
+                </a>
+              ) : (
+                item.title
+              )}
+              {index < items.length - 1 && <br />}
+            </span>
+          ))}
         </span>
       </div>
     )
@@ -122,8 +131,8 @@ export default function ProjectPage({ project, footerData }: ProjectPageProps) {
             {renderRow('CONSULT', project.consult)}
           </div>
           <div className="project-details-column">
-            {renderPortableTextRow('AWARDS', project.awardsList)}
-            {renderPortableTextRow('PUBLISHED', project.publicationsList)}
+            {renderLinkedListRow('AWARDS', project.awards)}
+            {renderLinkedListRow('PUBLISHED', project.published)}
           </div>
         </div>
 

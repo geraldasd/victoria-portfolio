@@ -107,74 +107,54 @@ export default defineType({
       description: 'Consultants or Tutor name/s, n/a if not applicable',
     }),
     defineField({
-      name: 'awardsList',
+      name: 'awards',
       title: 'Awards',
       type: 'array',
+      description: 'Awards received, with optional links',
       of: [
         {
-          type: 'block',
-          styles: [{ title: 'Normal', value: 'normal' }],
-          marks: {
-            decorators: [
-              { title: 'Strong', value: 'strong' },
-              { title: 'Emphasis', value: 'em' }
-            ],
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'Link',
-                fields: [
-                  { name: 'href', type: 'url', title: 'URL' },
-                  {
-                    name: 'reference',
-                    type: 'reference',
-                    title: 'Internal reference',
-                    to: [{ type: 'project' }]
-                  },
-                  { name: 'blank', type: 'boolean', title: 'Open in new tab', initialValue: true }
-                ]
-              }
-            ]
-          }
-        }
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              title: 'Award Title',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'link',
+              title: 'Link',
+              type: 'url',
+              description: 'Optional link for the award',
+            },
+          ],
+        },
       ],
-      description: 'Awards received, with optional links',
     }),
     defineField({
-      name: 'publicationsList',
+      name: 'published',
       title: 'Published',
       type: 'array',
+      description: 'Publications featuring this project, with optional links',
       of: [
         {
-          type: 'block',
-          styles: [{ title: 'Normal', value: 'normal' }],
-          marks: {
-            decorators: [
-              { title: 'Strong', value: 'strong' },
-              { title: 'Emphasis', value: 'em' }
-            ],
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'Link',
-                fields: [
-                  { name: 'href', type: 'url', title: 'URL' },
-                  {
-                    name: 'reference',
-                    type: 'reference',
-                    title: 'Internal reference',
-                    to: [{ type: 'project' }]
-                  },
-                  { name: 'blank', type: 'boolean', title: 'Open in new tab', initialValue: true }
-                ]
-              }
-            ]
-          }
-        }
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              title: 'Publication Title',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'link',
+              title: 'Link',
+              type: 'url',
+              description: 'Optional link for the publication',
+            },
+          ],
+        },
       ],
-      description: 'Publications featuring this project, with optional links',
     }),
     defineField({
       name: 'linkType',
