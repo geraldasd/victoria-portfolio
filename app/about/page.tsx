@@ -1,7 +1,19 @@
 import { client } from '@/sanity/lib/client'
 import AboutPage from '@/app/components/AboutPage'
+import { Metadata } from 'next'
+import { buildMetadata } from '@/lib/metadata'
+import { aboutSeoQuery } from '@/sanity/lib/queries'
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * Generate page-level metadata from the about document's SEO fields.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await client.fetch(aboutSeoQuery)
+  if (!data) return {}
+  return buildMetadata(data.seo, data.aboutMe || 'About')
+}
 
 async function getAboutData() {
   const query = `*[_type == "about"][0]{

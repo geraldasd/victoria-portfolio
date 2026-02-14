@@ -1,11 +1,25 @@
 import { client } from '@/sanity/lib/client'
 import ProjectPage from '@/app/components/ProjectPage'
 import { notFound } from 'next/navigation'
+import { Metadata } from 'next'
+import { buildMetadata } from '@/lib/metadata'
+import { projectSeoQuery } from '@/sanity/lib/queries'
 
 export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ slug: string }>
+}
+
+/**
+ * Generate page-level metadata from the project's SEO fields,
+ * falling back to project name → global defaults.
+ */
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const data = await client.fetch(projectSeoQuery, { slug })
+  if (!data) return {}
+  return buildMetadata(data.seo, data.name)
 }
 
 async function getProject(slug: string) {

@@ -317,6 +317,12 @@ export default defineType({
       ],
       description: 'Drawing images',
     }),
+    defineField({
+      name: 'seo',
+      title: 'SEO',
+      type: 'seo',
+      description: 'SEO metadata for this project page. Overrides global defaults.',
+    }),
   ],
   orderings: [
     {

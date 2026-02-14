@@ -90,5 +90,11 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'seo',
+      title: 'SEO',
+      type: 'seo',
+      description: 'SEO metadata for the about page. Overrides global defaults.',
+    }),
   ],
 })

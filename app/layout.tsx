@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { buildMetadata } from "@/lib/metadata";
 
 // Configure the custom fonts
 const monument = localFont({
@@ -24,6 +25,14 @@ const monumentMono = localFont({
   ],
   variable: "--font-monument-mono",
 });
+
+/**
+ * Generate global metadata from the Sanity "settings" singleton.
+ * Pages can override these via their own generateMetadata.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata()
+}
 
 export default function RootLayout({
   children,
