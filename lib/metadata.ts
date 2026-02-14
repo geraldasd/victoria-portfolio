@@ -30,8 +30,10 @@ let _settingsCache: SettingsData | null = null
 
 export async function getSettings(): Promise<SettingsData> {
   if (_settingsCache) return _settingsCache
-  _settingsCache = (await client.fetch<SettingsData>(settingsQuery)) ?? {}
-  return _settingsCache
+  const data = await client.fetch<SettingsData | null>(settingsQuery)
+  const result: SettingsData = data ?? {}
+  _settingsCache = result
+  return result
 }
 
 // ─── Build Metadata helper ───────────────────────────────────────────
