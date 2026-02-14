@@ -1,0 +1,746 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "slug"
+      }
+    ],
+    "name": "media.tag",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "introText",
+        "type": "array",
+        "title": "Introduction Text"
+      }
+    ],
+    "name": "header",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "description": "Project number (e.g., 0001)",
+        "name": "no",
+        "type": "string",
+        "title": "No."
+      },
+      {
+        "description": "Project name",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "name",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "URL-friendly identifier for the project",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "description": "Project description/caption text",
+        "name": "caption",
+        "type": "text",
+        "title": "Project Caption"
+      },
+      {
+        "description": "Project date (e.g. 2022)",
+        "name": "dates",
+        "type": "string",
+        "title": "Date/s"
+      },
+      {
+        "description": "Project status (e.g., Completed, In Progress)",
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "description": "Project types (e.g., Living Environment)",
+        "name": "types",
+        "type": "string",
+        "title": "Type/s"
+      },
+      {
+        "description": "Project outputs (e.g., Research)",
+        "name": "outputs",
+        "type": "string",
+        "title": "Output/s"
+      },
+      {
+        "description": "Project brief (e.g., House, Apartment)",
+        "name": "briefs",
+        "type": "string",
+        "title": "Brief/s"
+      },
+      {
+        "description": "Project location (e.g., Address, City, Country)",
+        "name": "location",
+        "type": "string"
+      },
+      {
+        "description": "Client name or Studio name",
+        "name": "for",
+        "type": "string"
+      },
+      {
+        "description": "Collaborators, n/a if not applicable",
+        "name": "with",
+        "type": "string"
+      },
+      {
+        "description": "Builder name, n/a if not applicable",
+        "name": "builder",
+        "type": "string"
+      },
+      {
+        "description": "Team members, n/a if not applicable",
+        "name": "team",
+        "type": "text"
+      },
+      {
+        "description": "Photographer credit, n/a if not applicable",
+        "name": "photos",
+        "type": "string",
+        "title": "Photo/s"
+      },
+      {
+        "description": "Consultants or Tutor name/s, n/a if not applicable",
+        "name": "consult",
+        "type": "string"
+      },
+      {
+        "description": "Awards received, with optional links",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Award Title"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Optional link for the award",
+                "name": "link",
+                "type": "url"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "awards",
+        "type": "array"
+      },
+      {
+        "description": "Publications featuring this project, with optional links",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Publication Title"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Optional link for the publication",
+                "name": "link",
+                "type": "url"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "published",
+        "type": "array"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "No Link",
+              "value": "none"
+            },
+            {
+              "title": "Internal Page",
+              "value": "internal"
+            },
+            {
+              "title": "External URL",
+              "value": "external"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "none",
+        "name": "linkType",
+        "type": "string"
+      },
+      {
+        "description": "Internal page path (e.g., /projects/my-project)",
+        "hidden": "conditional",
+        "name": "internalLink",
+        "type": "string",
+        "title": "Internal Link (Slug)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Full external URL (e.g., https://example.com)",
+        "hidden": "conditional",
+        "name": "externalLink",
+        "type": "url",
+        "title": "External URL"
+      },
+      {
+        "description": "Display order (lower numbers appear first)",
+        "name": "order",
+        "type": "number"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Optional featured image to display below the project row",
+        "name": "featuredImage",
+        "type": "image"
+      },
+      {
+        "description": "Caption text displayed below the featured image",
+        "hidden": "conditional",
+        "name": "imageCaption",
+        "type": "text"
+      },
+      {
+        "description": "Photography or render images",
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "description": "Optional caption for this image",
+                "name": "caption",
+                "type": "text"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "photographyRenders",
+        "type": "array",
+        "title": "Photography/Renders"
+      },
+      {
+        "description": "Model images",
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "description": "Optional caption for this image",
+                "name": "caption",
+                "type": "text"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "models",
+        "type": "array"
+      },
+      {
+        "description": "Drawing images",
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "description": "Optional caption for this image",
+                "name": "caption",
+                "type": "text"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "drawings",
+        "type": "array"
+      }
+    ],
+    "name": "project",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "description": "Large text that spans the full width (e.g., \"V I C T O R I A\")",
+        "name": "logo",
+        "type": "string",
+        "title": "Logo Text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Instagram profile link",
+        "name": "instagram",
+        "type": "url",
+        "title": "Instagram URL"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "LinkedIn profile link",
+        "name": "linkedin",
+        "type": "url",
+        "title": "LinkedIn URL"
+      },
+      {
+        "description": "Phone number",
+        "name": "telephone",
+        "type": "string"
+      },
+      {
+        "description": "Email address (will be underlined with mailto link)",
+        "name": "email",
+        "type": "string"
+      }
+    ],
+    "name": "footer",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Main title for the about page",
+        "name": "aboutMe",
+        "type": "string"
+      },
+      {
+        "description": "Subtitle/description text",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "description": "Phone number",
+        "name": "phone",
+        "type": "string"
+      },
+      {
+        "description": "Email address",
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Instagram profile URL",
+        "name": "instagram",
+        "type": "url"
+      },
+      {
+        "description": "List of awards with optional links",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Award Title"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Optional link for the award",
+                "name": "link",
+                "type": "url"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "awards",
+        "type": "array"
+      },
+      {
+        "description": "Gallery of featured images",
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "description": "Optional caption for the image",
+                "name": "caption",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "featuredImages",
+        "type": "array"
+      }
+    ],
+    "name": "about",
+    "type": "document"
+  }
+]
